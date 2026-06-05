@@ -1,0 +1,68 @@
+function generarMapa()
+    % generarMapa.m
+    % Genera un mapa de ocupación binario con obstáculos en forma de "L"
+    
+    % --- Parámetros del mapa ---
+    resolucion = 1;       % celdas por metro
+    ancho = 25;           % en metros
+    alto = 25;            % en metros
+    
+    % --- Crear matriz inicial ---
+    % 0 = libre (blanco), 1 = ocupado (negro)
+    rawMap = zeros(alto, ancho);
+    
+    % Muros perimetrales
+    rawMap(1,:) = 1; 
+    rawMap(end,:) = 1;
+    rawMap(:,1) = 1; 
+    rawMap(:,end) = 1;
+    
+    % --- Obstáculo en forma de L inferior ---
+    % Vertical desde x=10 hasta y=12
+    rawMap(10:12, 10) = 1;
+    % Horizontal hacia la derecha
+    rawMap(12, 10:15) = 1;
+    
+    % --- Obstáculo en forma de L superior ---
+    % Vertical desde x=15 hasta y=20 al 25
+    rawMap(20:25, 15) = 1;
+    % Horizontal hacia la derecha
+    rawMap(20, 15:22) = 1;
+    
+    % --- Obstáculo lateral izquierdo ---
+    % Desde x=0 a 5 en y=12
+    rawMap(12, 0+1:5) = 1;   % +1 porque MATLAB no permite índice 0
+ 
+    % Línea horizontal en y=12, de x=20 a 25
+    rawMap(12, 20:25) = 1;
+    
+    
+    % --- Obstáculos laterales derechos ---
+    % Desde x=20 a 25 en y=12
+    rawMap(12, 20:25) = 1;
+    % Desde x=20 a 25 en y=5
+    rawMap(5, 20:25) = 1;
+    
+    % --- Crear objeto OccupancyGrid ---
+    map = occupancyMap(rawMap, resolucion);
+    
+    % --- Visualización ---
+    figure;
+    show(map);
+    title('Mapa de Ocupación Binario con Obstáculos en Forma de L');
+    xlabel('X [m]');
+    ylabel('Y [m]');
+    
+    % --- Guardar en archivo MAT ---
+    save('mapaLaberintoL.mat','map');
+    
+    fprintf('Mapa generado y guardado en mapaLaberintoL.mat\n');
+end
+
+
+
+
+
+
+%[appendix]{"version":"1.0"}
+%---
